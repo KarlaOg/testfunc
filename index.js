@@ -1,22 +1,17 @@
 const express = require('express')
 const app = express()
-const cors = require('cors');
+const db = require('./config/config');
+const port = 3000
 
-app.get('/', (req, res)  => {
-  res.send('Hello World!')
+
+app.get('/', (req, res) => {
+  res.send("Hello World")
 })
 
-//Database Connection
-const db = require('./config/database');
-db.authenticate().then(() => {
-    console.log('Database connected...');
-}).catch(err => {
-    console.log('Error: ' + err);
+app.get('/testDB', (req, res) => {
+
 })
 
-app.use(cors("*"));
-
-const PORT = process.env.PORT || 5000;
-db.sync().then(() => {
-    app.listen(PORT, console.log(`Server started on port ${PORT}`));
-}).catch(err => console.log("Error: " + err));
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}`)
+})
