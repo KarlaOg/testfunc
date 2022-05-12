@@ -4,12 +4,13 @@ const router = new Router();
 
 router.get("", async (req,res) =>{
     const articles = await Article.findAll({where: req.query});
-    res.send(articles);
+    res.send(articles)
 });
 
 router.post("", async (req,res) => {
     try{
         const article = await Article.create(req.body);
+        console.log(article)
         res.status(201).send(article);
     }
     catch (error){
