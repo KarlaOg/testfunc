@@ -1,16 +1,16 @@
 const { Router }  = require("express");
-const { Article } = require("../models")
+const { User } = require("../models")
 const router = new Router();
 
 router.get("/", async (req,res) =>{
-    const articles = await Article.findAll({where: req.query});
-    res.send(articles);
+    const user = await User.findAll({where: req.query});
+    res.send(user);
 });
 
 router.post("/", async (req,res) => {
     try{
-        const article = await Article.create(req.body);
-        res.status(201).send(article);
+        const user = await User.create(req.body);
+        res.status(201).send(user);
     }
     catch (error){
         if (error.name === "SequelizeValidationError"){
