@@ -1,14 +1,13 @@
-const { AfterAll } = require('@cucumber/cucumber');
-const { Sequelize } = require('sequelize/types');
+const { sequelize } = require("../models/index.js");
 const supertest = require('supertest');
 
 const client = supertest(require("../app.js"));
 
-AfterAll(async ()=>{
-    await Sequelize.close();
-})
+afterAll(async () => {
+    await sequelize.close();
+  });
 
-describes('testArticle Api', ()=>{
+describe('testArticle Api', ()=>{
     it("should return all articles",async ()=>{
         const response = await client.get("/articles")
         expect(response.status).toBe(200);
@@ -16,13 +15,14 @@ describes('testArticle Api', ()=>{
     })
 })
 
-it("should create a new article", async ()=> {
-    const response = await client.post("/articles")
-    .set("Content-Type","application/json")
-    .send({
-        title:"je suis le titre",
-        content:"joadazopakpoezkep",
-        author:1,
+    it("should create a new article", async ()=> {
+        const response = await client
+        .post("/articles")
+        .set("Content-Type","application/json")
+        .send({
+            title:"je suis le titre",
+            content:"joadazopakpoezkep",
+            author:1,
     });
     expect(response.status).toBe(201);
     expect(response.title).toBe("je suis le titre");

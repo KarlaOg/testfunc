@@ -2,12 +2,12 @@ const { Router }  = require("express");
 const { Article } = require("../models")
 const router = new Router();
 
-router.get("/", async (req,res) =>{
+router.get("", async (req,res) =>{
     const articles = await Article.findAll({where: req.query});
     res.send(articles);
 });
 
-router.post("/", async (req,res) => {
+router.post("", async (req,res) => {
     try{
         const article = await Article.create(req.body);
         res.status(201).send(article);
@@ -18,8 +18,9 @@ router.post("/", async (req,res) => {
         }
         else{
             res.sendStatus(500);
+            console.error(error)
         }
     }
 });
 
-modele.exports = router;
+module.exports = router;
