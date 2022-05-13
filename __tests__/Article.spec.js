@@ -45,7 +45,6 @@ it('should create a new article', async () => {
       email: 'user@gmail.com',
       password: 'test',
     });
-  //   console.log(login.status);
   const response = await client
     .post('/articles')
     .set('Content-Type', 'application/json')
