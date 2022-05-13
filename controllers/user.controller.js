@@ -1,8 +1,7 @@
 const models = require('../models');
 const jwt = require('jsonwebtoken');
-const bcrypt = require("bcryptjs");
+const bcrypt = require('bcryptjs');
 require('dotenv').config();
-
 
 const getAllUser = async (req, res) => {
   const user = await models.User.findAll({ where: req.query });
@@ -11,12 +10,21 @@ const getAllUser = async (req, res) => {
 
 const createUser = async (req, res) => {
   try {
-
     const { firstname, lastname, email, password } = req.body;
 
+    console.log(req.body);
     // Validate user input
-    if (!(email && password && firstname && lastname)) {
-      res.status(400).send("All input is required");
+    if (!password) {
+      res.status(400).send('password is required');
+    }
+    if (!email) {
+      res.status(400).send('email is required');
+    }
+    if (!firstname) {
+      res.status(400).send('firstname is required');
+    }
+    if (!lastname) {
+      res.status(400).send('lastname is required');
     }
 
     // check if user already exist
@@ -30,54 +38,45 @@ const createUser = async (req, res) => {
     //Encrypt user password
     encryptedPassword = await bcrypt.hash(password, 10);
 
-
-
     // Create user in our database
     const user = await models.User.create({
       firstname,
       lastname,
       email,
       password: encryptedPassword,
-
     });
 
     const token = jwt.sign(
       { user_id: user._id, email, role: 'role_user' },
       process.env.TOKEN_KEY,
       {
-        expiresIn: "3h",
+        expiresIn: '3h',
       }
     );
-    console.log(user)
+    console.log(user);
     user.token = token;
-    console.log(user.token)
+    console.log(user.token);
 
     res.status(201).json(user);
-  }
-  catch (error) {
-    if (error.name === "SequelizeValidationError") {
+  } catch (error) {
+    if (error.name === 'SequelizeValidationError') {
       res.status(400).send(error.message);
-    }
-    else {
+    } else {
       res.status(500).send(error.message);
     }
   }
 };
 
-
 const getUserById = async (req, res) => {
   try {
     const user = await models.User.findOne({
-
-      where: { id: req.params.id }
+      where: { id: req.params.id },
     });
     return res.status(200).json({ user });
-  }
-  catch (error) {
-    if (error.name === "SequelizeValidationError") {
+  } catch (error) {
+    if (error.name === 'SequelizeValidationError') {
       res.status(400).send(error.message);
-    }
-    else {
+    } else {
       res.sendStatus(500);
     }
   }
@@ -86,15 +85,13 @@ const getUserById = async (req, res) => {
 const updateUser = async (req, res) => {
   try {
     const user = await models.User.update(req.body, {
-      where: { id: req.params.id }
+      where: { id: req.params.id },
     });
     return res.status(200).json({ user });
-  }
-  catch (error) {
-    if (error.name === "SequelizeValidationError") {
+  } catch (error) {
+    if (error.name === 'SequelizeValidationError') {
       res.status(400).send(error.message);
-    }
-    else {
+    } else {
       res.sendStatus(500);
     }
   }
@@ -103,17 +100,15 @@ const updateUser = async (req, res) => {
 const deleteUser = async (req, res) => {
   try {
     const user = await models.User.destroy({
-      where: { id: req.params.id }
+      where: { id: req.params.id },
     });
     return res.status(200).json({
-      message: "User deleted successfully",
+      message: 'User deleted successfully',
     });
-  }
-  catch (error) {
-    if (error.name === "SequelizeValidationError") {
+  } catch (error) {
+    if (error.name === 'SequelizeValidationError') {
       res.status(400).send(error.message);
-    }
-    else {
+    } else {
       res.sendStatus(500);
     }
   }
@@ -127,10 +122,12 @@ const login = async (req, res) => {
 
     // Validate user input
     if (!(email && password)) {
-      res.status(400).send("All input is required");
+      res.status(400).send('All input is required');
     }
     // Validate if user exist in our database
-    const user = await models.User.findOne({ where: { email: req.body.email} });
+    const user = await models.User.findOne({
+      where: { email: req.body.email },
+    });
 
     if (user && (await bcrypt.compare(password, user.password))) {
       // Create token
@@ -138,7 +135,7 @@ const login = async (req, res) => {
         { user_id: user._id, email, role: 'role_user' },
         process.env.TOKEN_KEY,
         {
-          expiresIn: "3h",
+          expiresIn: '3h',
         }
       );
 
@@ -148,13 +145,11 @@ const login = async (req, res) => {
       // user
       res.status(200).json(user);
     }
-    res.status(400).send("Invalid Credentials");
+    res.status(400).send('Invalid Credentials');
   } catch (err) {
     console.log(err);
   }
-
-}
-
+};
 
 module.exports = {
   getAllUser,
@@ -162,5 +157,5 @@ module.exports = {
   getUserById,
   updateUser,
   deleteUser,
-  login
-}
+  login,
+};
