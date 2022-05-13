@@ -1,58 +1,12 @@
-const { Router }  = require("express");
-const { Article } = require("../models")
+const { Router } = require('express');
+const articleController = require('../controllers/article.controller');
 const router = new Router();
+const auth = require('../middleware/auth');
 
-router.get("", async (req,res) =>{
-    const articles = await Article.findAll({where: req.query});
-    res.send(articles)
-});
-
-router.post("", async (req,res) => {
-    try{
-        const article = await Article.create(req.body);
-        res.status(201).send(article);
-    }
-    catch (error){
-        if (error.name === "SequelizeValidationError"){
-            res.status(400).send(error.message);
-        }
-        else{
-            res.sendStatus(500);
-            console.error(error)
-        }
-    }
-});
-
-router.put("", async (req,res) => {
-    try{
-        const article = await Article.update(req.body,{where: req.query});
-        res.status(200).send(article);
-    }
-    catch (error){
-        if (error.name === "SequelizeValidationError"){
-            res.status(400).send(error.message);
-        }
-        else{
-            res.sendStatus(500);
-            console.error(error)
-        }
-    }
-});
-
-router.post("", async (req,res) => {
-    try{
-        const article = await Article.destroy({where: req.query});
-        res.status(200)
-    }
-    catch (error){
-        if (error.name === "SequelizeValidationError"){
-            res.status(400).send(error.message);
-        }
-        else{
-            res.sendStatus(500);
-            console.error(error)
-        }
-    }
-});
+router.get('/', articleController.getAllArticle);
+router.get('/:id', articleController.getByArticle);
+router.post('/', auth, articleController.createArticle);
+router.put('/:id', auth, articleController.updatArticle);
+router.delete('/:id', auth, articleController.deleteArticle);
 
 module.exports = router;
