@@ -33,34 +33,58 @@ describe('testArticle Api', () => {
     expect(response.status).toBe(200);
     expect(response.body.length).toBe(0);
   });
+
+  it('should return the first article', async () => {
+    await FixtureLoader(
+      await fs.realpath(__dirname + '/../fixtures/article.json')
+    );
+    const response = await client.get(
+      '/articles/' + ReferenceManager.getValue('article1.id')
+    );
+    console.log(response.body);
+    expect(response.status).toBe(200);
+    expect(response.body.title).toBe(
+      ReferenceManager.getValue('article1.title')
+    );
+    expect(response.body.content).toBe(
+      ReferenceManager.getValue('article1.content')
+    );
+  });
+
+  it('should not return the first article', async () => {
+    const response = await client.get('/articles/1');
+    expect(response.status).toBe(200);
+    expect(response.body).toBeNull();
+  });
+
+  it('should create a new article', async () => {
+    await FixtureLoader(
+      await fs.realpath(__dirname + '/../fixtures/user.json')
+    );
+
+    const login = await client
+      .post('/users/login')
+      .set('Content-Type', 'application/json')
+      .send({
+        email: 'user@gmail.com',
+        password: 'test',
+      });
+    const response = await client
+      .post('/articles')
+      .set('Content-Type', 'application/json')
+      .set('x-access-token', login.body.token)
+      .send({
+        title: 'titre 2',
+        content: 'joadazopakpoezkep',
+        author: 'toto',
+      });
+    expect(response.status).toBe(201);
+    expect(response.body.title).toBe('titre 2');
+    expect(response.body).toHaveProperty('id');
+    expect(response.body.content).toBe('joadazopakpoezkep');
+    expect(response.body.author).toBe('toto');
+  });
 });
-
-it('should create a new article', async () => {
-  await FixtureLoader(await fs.realpath(__dirname + '/../fixtures/user.json'));
-
-  const login = await client
-    .post('/users/login')
-    .set('Content-Type', 'application/json')
-    .send({
-      email: 'user@gmail.com',
-      password: 'test',
-    });
-  const response = await client
-    .post('/articles')
-    .set('Content-Type', 'application/json')
-    .set('x-access-token', login.body.token)
-    .send({
-      title: 'titre 2',
-      content: 'joadazopakpoezkep',
-      author: 'toto',
-    });
-  expect(response.status).toBe(201);
-  expect(response.body.title).toBe('titre 2');
-  expect(response.body).toHaveProperty('id');
-  expect(response.body.content).toBe('joadazopakpoezkep');
-  expect(response.body.author).toBe('toto');
-});
-
 // it('should return all articles with data', async () => {
 //   await FixtureLoader(
 //     await fs.realpath(__dirname + '/../fixtures/article.json')

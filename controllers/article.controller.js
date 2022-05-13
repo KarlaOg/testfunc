@@ -9,7 +9,7 @@ const getByArticle = async (req, res) => {
     const article = await models.Article.findOne({
       where: { id: req.params.id },
     });
-    return res.status(200).json({ article });
+    return res.status(200).json(article);
   } catch (error) {
     if (error.name === 'SequelizeValidationError') {
       res.status(400).send(error.message);
