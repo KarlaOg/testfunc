@@ -50,7 +50,7 @@ it("should return all articles with data", async () => {
     );
     const response = await client.get("/articles");
     expect(response.status).toBe(200);
-    expect(response.body.length).toBe(5);
+    expect(response.body.length).toBe(3);
   });
   it("should return a articles with data", async () => {
     await FixtureLoader(

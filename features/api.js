@@ -1,77 +1,83 @@
+const { Given, When, Then, AfterAll } = require("@cucumber/cucumber");
+const { expect } = require("expect");
 const supertest = require("supertest");
-const { sequelize } = require("../models/index.js");
-const fs = require("fs/promises");
-const FixtureLoader = require("../fixtures/FixtureLoader.js");
-const ReferenceManager = require("../fixtures/ReferenceManager.js");
-
+const ReferenceManager = require("../fixtures/ReferenceManager");
+const { sequelize } = require("../models");
 const client = supertest(require("../app.js"));
 
-beforeEach(async () => {
-  sequelize.constructor._cls = new Map();
-  sequelize.constructor._cls.set("transaction", await sequelize.transaction());
-});
-
-afterEach(async () => {
-  await sequelize.constructor._cls.get("transaction").rollback();
-  sequelize.constructor._cls.delete("transaction");
-});
-
-afterAll(async () => {
-  await sequelize.close();
-});
-
-describe("test article Api", () => {
-  it("should return all articles", async () => {
-    const response = await client.get("/articles");
-    expect(response.status).toBe(200);
-    expect(response.body.length).toBe(0);
+function interpolateString(str) {
+    return str.replace(/\{\{\s*([^}]+)\s*\}\}/g, (match, name) => {
+      return ReferenceManager.getValue(name);
+    });
+  }
+  function interpolate(obj) {
+    for (let key in obj) {
+      if (typeof obj[key] === "string") {
+        obj[key] = interpolateString(obj[key]);
+      }
+      if (typeof obj[key] === "object") {
+        obj[key] = interpolate(obj[key]);
+      }
+    }
+    return obj;
+  }
+  
+  AfterAll(async () => {
+    await sequelize.close();
   });
-
-  it("should create a new article", async () => {
-    const response = await client
-      .post("/articles")
-      .set("Content-Type", "application/json")
-      .send({
-        title: "Test article scénario",
-        content: "eozakopezkzaoe",
-        author: 1,
+  
+  Given("I have a payload", function (dataTable) {
+    this.payload = interpolate(dataTable.rowsHash());
+  });
+  
+  Given("I am authenticated as {string}", function (string) {
+    const user = ReferenceManager.getReference(string);
+    // user => token
+    this.token = "???";
+  });
+  
+  When("I request {string} {string}", async function (method, path) {
+    this.request = client[method.toLowerCase()](interpolateString(path));
+    this.response = await this.request.send();
+    // Write code here that turns the phrase above into concrete actions
+  });
+  
+  When("I request {string} {string} with payload", async function (method, path) {
+    this.request = client[method.toLowerCase()](interpolateString(path)).set(
+      "Content-Type",
+      "application/json"
+    );
+    this.response = await this.request.send(this.payload);
+  });
+  
+  Then("the response code should be {int}", function (int) {
+    // Write code here that turns the phrase above into concrete actions
+    expect(this.response.status).toBe(int);
+  });
+  
+  Then("I should receive an empty array", function () {
+    // Write code here that turns the phrase above into concrete actions
+    expect(this.response.body.length).toBe(0);
+  });
+  
+  Then("I should receive an array with {int} elements", function (int) {
+    // Write code here that turns the phrase above into concrete actions
+    expect(this.response.body.length).toBe(int);
+  });
+  
+  Then("I should have a property {string}", function (string) {
+    // Write code here that turns the phrase above into concrete actions
+    expect(this.response.body).toHaveProperty(string);
+  });
+  
+  Then(
+    "I should receive an element with the following attributes",
+    function (dataTable) {
+      const expected = interpolate(dataTable.rowsHash());
+      const actual = this.response.body;
+      expect(typeof actual).toBe("object");
+      Object.keys(expected).forEach((key) => {
+        expect(actual).toHaveProperty(key, expected[key]);
       });
-    expect(response.status).toBe(201);
-    expect(response.body).toHaveProperty("id");
-    expect(response.body.title).toBe("Test article");
-    expect(response.body.content).toBe("eozakopezkzaoe");
-    expect(response.body.author).toBe(1);
-  });
-  it("should return all articles with data", async () => {
-    await FixtureLoader(
-      await fs.realpath(__dirname + "/../fixtures/article.json")
-    );
-    const response = await client.get("/articles");
-    expect(response.status).toBe(200);
-    expect(response.body.length).toBe(3);
-  });
-  it("should return a articles with data", async () => {
-    await FixtureLoader(
-      await fs.realpath(__dirname + "/../fixtures/article.json")
-    );
-    const response = await client.get(
-      "/articles/" + ReferenceManager.getValue("article1.id")
-    );
-    expect(response.status).toBe(200);
-    expect(response.body.id).toBe(ReferenceManager.getValue("article1.id"));
-    expect(response.body.title).toBe(ReferenceManager.getValue("article1.title"));
-    expect(response.body.content).toBe(ReferenceManager.getValue("article1.content"));
-    expect(response.body.author).toBe(ReferenceManager.getValue("article1.author"));
-  });
-  it("should return a articles with data", async () => {
-    await FixtureLoader(
-      await fs.realpath(__dirname + "/../fixtures/article.json")
-    );
-    const response = await client.get(
-      "/articles/" + ReferenceManager.getValue("article2.id")
-    );
-    expect(response.status).toBe(200);
-    expect(response.body.id).toBe(ReferenceManager.getValue("article2.id"));
-    expect(response.body.name).toBe(ReferenceManager.getValue("article1.name"));
-  });
-});
+    }
+  );

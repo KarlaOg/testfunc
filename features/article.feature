@@ -8,22 +8,22 @@ Feature: Article API
 
     Scenario: Create a article
         Given I have a payload
-            | title  | "Article 1" |
-            | content | "foksqmksmqkms"        |
+            | title  | "Scissor" |
+            | content | "je suis un ciseau"        |
             | author | 1 |
         When I request "POST" "/articles" with payload
         Then I should have a property "id"
         And the response code should be 201
         And I should receive an element with the following attributes
-            | title | "Article 1" |
+            | title | "Scissor" |
 
     Scenario: Get a article
         Given I load fixtures "article.json"
         When I request "GET" "/articles/{{article2.id}}"
         Then I should receive an element with the following attributes
-            | title | {{article1.title}} |
-            | content | {{article1.content}} |
-            | author | {{article1.author}} |
+            | title | {{article2.title}} |
+            | content | {{article2.content}} |
+            | author | {{article2.author}} |
 
     Scenario: Update a article
         Given I load fixtures "user.json,article.json"
