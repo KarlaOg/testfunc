@@ -1,21 +1,21 @@
 {
-    "model": "Article",
-    "data": {
-      "article1": {
-        "title": "Scissor",
-        "content":"je suis un ciseau",
-        "author":1
-      },
-      "article2": {
-        "title": "Scissor",
-        "content":"je suis un ciseau",
-        "author":1
-      },
-      "article3": {
-        "title": "Scissor",
-        "content":"je suis un ciseau",
-        "author":1
-      }
+  "model": "Article",
+  "data": {
+    "article1": {
+      "title": "Scissor",
+      "content": "dsokdqsok",
+      "author": 1
     },
-    "depends": ["user.json"]
-  }
+    "article2": {
+      "title": "Scissor",
+      "content": "dsokdqsok",
+      "author": 1
+    },
+    "article3": {
+      "title": "Scissor",
+      "content": "dsokdqsok",
+      "author": 1
+    }
+  },
+  "depends": ["user.json"]
+}
