@@ -2,15 +2,14 @@
   "model": "User",
   "data": {
     "admin": {
-      "name": "user admin",
-      "firstname": "Martin",
-      "lastname": "Jean",
+      "firstName": "Martin",
+      "lastName": "Jean",
       "email": "admin@gmail.com",
       "password": "test"
     },
     "user": {
-      "firstname": "Martin",
-      "lastname": "Oez",
+      "firstName": "Martin",
+      "lastName": "Oez",
       "email": "user@gmail.com",
       "password": "test"
     }
