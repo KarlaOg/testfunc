@@ -23,7 +23,7 @@ router.post("", async (req,res) => {
     }
 });
 
-router.patch("", async (req,res) => {
+router.put("", async (req,res) => {
     try{
         const article = await Article.update(req.body,{where: req.query});
         res.status(200).send(article);
