@@ -1,13 +1,18 @@
 {
-    "model": "User",
-    "data": {
-      "admin": {
-        "name": "user admin",
-        "email": "admin@mail.com"
-      },
-      "user": {
-        "name": "user lambda",
-        "email": "user@mail.com"
-      }
+  "model": "User",
+  "data": {
+    "admin": {
+      "name": "user admin",
+      "firstname": "Martin",
+      "lastname": "Jean",
+      "email": "admin@gmail.com",
+      "password": "test"
+    },
+    "user": {
+      "firstname": "Martin",
+      "lastname": "Oez",
+      "email": "user@gmail.com",
+      "password": "test"
     }
   }
+}
