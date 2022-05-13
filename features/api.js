@@ -59,6 +59,11 @@ function interpolateString(str) {
     // Write code here that turns the phrase above into concrete actions
     expect(this.response.body.length).toBe(0);
   });
+
+  Then("I should receive an array", function () {
+    // Write code here that turns the phrase above into concrete actions
+    expect(this.response.body.length).toBe(22);
+  });
   
   Then("I should receive an array with {int} elements", function (int) {
     // Write code here that turns the phrase above into concrete actions

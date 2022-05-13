@@ -2,16 +2,12 @@
     "model": "User",
     "data": {
       "admin": {
-        "firstname":"coum", 
-        "lastname":"admin", 
-        "email":"koumbaba@test.com", 
-        "password":"password"
+        "name": "user admin",
+        "email": "admin@mail.com"
       },
       "user": {
-        "firstname":"em", 
-        "lastname":"lambda", 
-        "email":"em@test.com", 
-        "password":"password"
+        "name": "user lambda",
+        "email": "user@mail.com"
       }
     }
   }
