@@ -1,7 +1,6 @@
 const models = require('../models');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-require('dotenv').config();
 
 const getAllUser = async (req, res) => {
   const user = await models.User.findAll({ where: req.query });
@@ -12,7 +11,7 @@ const createUser = async (req, res) => {
   try {
     const { firstname, lastname, email, password } = req.body;
 
-    console.log(req.body);
+    // console.log(req.body);
     // Validate user input
     if (!password) {
       res.status(400).send('password is required');
@@ -27,23 +26,12 @@ const createUser = async (req, res) => {
       res.status(400).send('lastname is required');
     }
 
-    // check if user already exist
-    // Validate if user exist in our database
-    // const oldUser = await models.User.findOne({ where : {email: req.body.email}});
-
-    // if (oldUser) {
-    //   return res.status(409).send("User Already Exist. Please Login");
-    // }
-
-    //Encrypt user password
-    encryptedPassword = await bcrypt.hash(password, 10);
-
     // Create user in our database
     const user = await models.User.create({
       firstname,
       lastname,
       email,
-      password: encryptedPassword,
+      password,
     });
 
     const token = jwt.sign(
@@ -128,9 +116,10 @@ const login = async (req, res) => {
     const user = await models.User.findOne({
       where: { email: req.body.email },
     });
-
+    console.log(user);
     if (user && (await bcrypt.compare(password, user.password))) {
       // Create token
+
       const token = jwt.sign(
         { user_id: user._id, email, role: 'role_user' },
         process.env.TOKEN_KEY,
@@ -139,11 +128,8 @@ const login = async (req, res) => {
         }
       );
 
-      // save user token
-      user.token = token;
-
       // user
-      res.status(200).json(user);
+      res.status(200).json({ token });
     }
     res.status(400).send('Invalid Credentials');
   } catch (err) {

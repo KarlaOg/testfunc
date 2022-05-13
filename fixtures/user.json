@@ -1,17 +1,18 @@
 {
-    "model": "User",
-    "data": {
-      "admin": {
-        "firstname":"coum", 
-        "lastname":"admin", 
-        "email":"koumbaba@test.com", 
-        "password":"password"
-      },
-      "user": {
-        "firstname":"em", 
-        "lastname":"lambda", 
-        "email":"em@test.com", 
-        "password":"password"
-      }
+  "model": "User",
+  "data": {
+    "admin": {
+      "name": "user admin",
+      "firstname": "Martin",
+      "lastname": "Jean",
+      "email": "admin@gmail.com",
+      "password": "test"
+    },
+    "user": {
+      "firstname": "Martin",
+      "lastname": "Oez",
+      "email": "user@gmail.com",
+      "password": "test"
     }
   }
+}
