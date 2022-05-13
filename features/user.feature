@@ -6,7 +6,7 @@ Scenario Outline: Login with valid credentials
     And Send a POST HTTP request
         |email|password|
         |admin@mail.com | "test"|
-        |user@mail.com | "test"|
+        |paul@mail.com| "test"|
     Then I should see users
     And the response code should be 200
 

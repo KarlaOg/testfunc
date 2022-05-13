@@ -30,10 +30,17 @@ function interpolateString(str) {
     this.payload = interpolate(dataTable.rowsHash());
   });
   
-  Given("I am authenticated as {string}", function (string) {
+  Given("I am authenticated as {string}", async function (string) {
     const user = ReferenceManager.getReference(string);
+    const login = await client
+    .post('/users/login')
+    .set('Content-Type', 'application/json')
+    .send({
+      email: 'jane5@test.com',
+      password: 'password',
+    });
     // user => token
-    this.token = "???";
+    this.token =  login.body.token;
   });
   
   When("I request {string} {string}", async function (method, path) {

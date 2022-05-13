@@ -19,9 +19,25 @@ Feature: Article API
             | title  | "Scissor" |
             | content | "je suis un ciseau" |
             | author | "1" |
+        And I am authenticated as "user"
+        When I request "POST" "/articles" with payload
+        And the response code should be 403
+        And I should receive an element with the following attributes
+            | title  | "Scissor" |
+            | content | "je suis un ciseau" |
+            | author | "1" |
+
         And I am authenticated as "admin"
         When I request "POST" "/articles" with payload
         And the response code should be 201
+        And I should receive an element with the following attributes
+            | title  | "Scissor" |
+            | content | "je suis un ciseau" |
+            | author | "1" |
+
+        And I am anonymous
+        When I request "POST" "/articles" with payload
+        And the response code should be 401
         And I should receive an element with the following attributes
             | title  | "Scissor" |
             | content | "je suis un ciseau" |
