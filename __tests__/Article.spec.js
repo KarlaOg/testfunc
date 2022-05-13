@@ -44,13 +44,13 @@ describe('testArticle Api', ()=>{
 
 })
 
-it("should return all articlesz with data", async () => {
+it("should return all articles with data", async () => {
     await FixtureLoader(
       await fs.realpath(__dirname + "/../fixtures/article.json")
     );
     const response = await client.get("/articles");
     expect(response.status).toBe(200);
-    expect(response.body.length).toBe(3);
+    expect(response.body.length).toBe(5);
   });
   it("should return a articles with data", async () => {
     await FixtureLoader(
