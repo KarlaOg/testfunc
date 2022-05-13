@@ -1,0 +1,11 @@
+{
+    "model": "User",
+    "data": {
+      "admin": {
+        "name": "user admin"
+      },
+      "user": {
+        "name": "user lambda"
+      }
+    }
+  }
