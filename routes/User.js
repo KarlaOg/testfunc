@@ -1,25 +1,15 @@
-const { Router }  = require("express");
-const { Article } = require("../models")
+const { Router } = require("express");
+const userController = require("../controllers/user.controller");
 const router = new Router();
+const auth = require("../middleware/auth");
 
-router.get("/", async (req,res) =>{
-    const articles = await Article.findAll({where: req.query});
-    res.send(articles);
-});
+router.get('/', auth ,  userController.getAllUser);
+router.post('/', userController.createUser);
+router.get('/:id', userController.getUserById);
+router.put('/:id', userController.updateUser);
+router.delete('/:id', userController.deleteUser);
+router.post('/login', userController.login);
 
-router.post("/", async (req,res) => {
-    try{
-        const article = await Article.create(req.body);
-        res.status(201).send(article);
-    }
-    catch (error){
-        if (error.name === "SequelizeValidationError"){
-            res.status(400).send(error.message);
-        }
-        else{
-            res.sendStatus(500);
-        }
-    }
-});
 
-modele.exports = router;
+
+module.exports = router;
