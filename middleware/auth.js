@@ -7,7 +7,7 @@ const verifyToken = (req, res, next) => {
     req.body.token || req.query.token || req.headers["x-access-token"];
 
   if (!token) {
-    return res.status(403).send("A token is required for authentication");
+    return res.status(401).send("A token is required for authentication");
   }
   try {
     const decoded = jwt.verify(token, config.TOKEN_KEY);
@@ -18,4 +18,24 @@ const verifyToken = (req, res, next) => {
   return next();
 };
 
-module.exports = verifyToken;
+
+const getRole = (req, res, next) => {
+  const token = req.headers["x-access-token"];
+  if (!token) {
+    return res.status(403).send("You don't have access to this resource");
+  }
+  try {
+    const decoded = jwt.verify(token, config.TOKEN_KEY);
+    console.log(decoded)
+
+  } catch (err) {
+    return res.status(403).send("Invalid Role");
+  }
+  return next();
+
+}
+
+module.exports = {
+  verifyToken,
+  getRole
+};
