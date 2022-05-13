@@ -41,9 +41,7 @@ const createUser = async (req, res) => {
         expiresIn: '3h',
       }
     );
-    console.log(user);
     user.token = token;
-    console.log(user.token);
 
     res.status(201).json(user);
   } catch (error) {
@@ -116,7 +114,6 @@ const login = async (req, res) => {
     const user = await models.User.findOne({
       where: { email: req.body.email },
     });
-    console.log(user);
     if (user && (await bcrypt.compare(password, user.password))) {
       // Create token
 
@@ -129,7 +126,7 @@ const login = async (req, res) => {
       );
 
       // user
-      res.status(200).json({ token });
+      return res.status(200).json({ token });
     }
     res.status(400).send('Invalid Credentials');
   } catch (err) {
