@@ -11,20 +11,7 @@ const getAllUser = async (req, res) => {
 
 const createUser = async (req, res) => {
   try {
-    // const user = await models.User.create(req.body);
-    // console.log(user)
 
-    // const token = jwt.sign(
-    //   { user_id: user._id, email },
-    //   process.env.TOKEN_KEY,
-    //   {
-    //     expiresIn: "2h",
-    //   }
-    // );
-    // // save user token
-    // user.token = token;
-
-    // res.status(201).send(user);
     const { firstname, lastname, email, password } = req.body;
 
     // Validate user input
@@ -43,7 +30,7 @@ const createUser = async (req, res) => {
     //Encrypt user password
     encryptedPassword = await bcrypt.hash(password, 10);
 
-  
+
 
     // Create user in our database
     const user = await models.User.create({
@@ -51,7 +38,7 @@ const createUser = async (req, res) => {
       lastname,
       email,
       password: encryptedPassword,
-    
+
     });
 
     const token = jwt.sign(
@@ -61,7 +48,8 @@ const createUser = async (req, res) => {
         expiresIn: "3h",
       }
     );
-    user.token = token; 
+    console.log(user)
+    user.token = token;
     console.log(user.token)
 
     res.status(201).json(user);
@@ -131,11 +119,48 @@ const deleteUser = async (req, res) => {
   }
 };
 
+const login = async (req, res) => {
+  // Our login logic starts here
+  try {
+    // Get user input
+    const { email, password } = req.body;
+
+    // Validate user input
+    if (!(email && password)) {
+      res.status(400).send("All input is required");
+    }
+    // Validate if user exist in our database
+    const user = await models.User.findOne({ where: { email: req.body.email} });
+
+    if (user && (await bcrypt.compare(password, user.password))) {
+      // Create token
+      const token = jwt.sign(
+        { user_id: user._id, email, role: 'role_user' },
+        process.env.TOKEN_KEY,
+        {
+          expiresIn: "3h",
+        }
+      );
+
+      // save user token
+      user.token = token;
+
+      // user
+      res.status(200).json(user);
+    }
+    res.status(400).send("Invalid Credentials");
+  } catch (err) {
+    console.log(err);
+  }
+
+}
+
 
 module.exports = {
   getAllUser,
   createUser,
   getUserById,
   updateUser,
-  deleteUser
+  deleteUser,
+  login
 }
