@@ -33,7 +33,6 @@ const createArticle = async (req, res) => {
       res.status(400).send(prettifyErrors(error));
     } else {
       res.sendStatus(500);
-      console.error(prettifyErrors(error));
     }
   }
 };
@@ -44,7 +43,6 @@ const updatArticle = async (req, res) => {
       where: { id: parseInt(req.params.id) },
       returning: true,
     });
-    console.error(parseInt(req.params.id), await models.Article.findAll());
 
     if (!result[0]) {
       return res.sendStatus(404);
@@ -52,7 +50,6 @@ const updatArticle = async (req, res) => {
     const [, [article]] = result;
     res.status(200).send(article);
   } catch (error) {
-    // console.error(error);
     if (error.name === 'SequelizeValidationError') {
       res.status(400).send(prettifyErrors(error));
     } else {
@@ -64,15 +61,14 @@ const updatArticle = async (req, res) => {
 
 const deleteArticle = async (req, res) => {
   try {
-    await models.Article.destroy({ where: req.params });
-    res.status(200).json({ message: 'article deleted' });
-  } catch (error) {
-    if (error.name === 'SequelizeValidationError') {
-      res.status(400).send(prettifyErrors(error));
-    } else {
-      res.sendStatus(500);
-      console.error(error);
+    const article = await models.Article.destroy({ where: req.params });
+    if (article === 0) {
+      return res.sendStatus(403);
     }
+    res.status(204).json({ message: 'article deleted' });
+    console.log(article);
+  } catch (error) {
+    res.sendStatus(404);
   }
 };
 
