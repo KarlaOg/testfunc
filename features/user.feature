@@ -19,9 +19,8 @@ Feature: User API
       | password  | {{user.password}}  |
 
   Scenario: Login
-    Given There is a user "<email>" and "<password>"
-    When I login to "/users/login"
-    And Send a POST HTTP request
+    Given I have a payload
       | email    | jandoe@gmail.com |
       | password | password         |
-      And the response code should be 200
+    When I request "POST" "/users/login" with payload  
+    Then the response code should be 200
