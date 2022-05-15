@@ -72,7 +72,7 @@ const getUserById = async (req, res) => {
     const user = await models.User.findOne({
       where: { id: req.params.id },
     });
-    return res.status(200).json({ user });
+    return res.status(200).json( user );
   } catch (error) {
     if (error.name === "SequelizeValidationError") {
       res.status(400).send(error.message);
