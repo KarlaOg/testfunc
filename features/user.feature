@@ -17,9 +17,10 @@ Feature: User API
       | lastname  | {{user.lastname}}  |
       | email     | {{user.email}}     |
       | password  | {{user.password}}  |
-  Scenario: Login 
+
+  Scenario: Login
     Given There is a user "<email>" and "<password>"
     When I login to "/users/login"
     And Send a POST HTTP request
-      | email         | password |
-      | jandoe@gmail.com | password |
+      | email    | jandoe@gmail.com |
+      | password | password         |
