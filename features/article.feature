@@ -12,9 +12,9 @@ Feature: Article API
             | content | "je suis un ciseau" |
             | author | "1" |
         When I request "POST" "/articles" with payload
-        And the response code should be 403
+        And the response code should be 401
 
-     Scenario: Create an article as admin
+     Scenario: Create an article as user
         Given I have a payload
             | title  | "Scissor" |
             | content | "je suis un ciseau" |
@@ -22,11 +22,13 @@ Feature: Article API
         And I am authenticated as "user"
         When I request "POST" "/articles" with payload
         And the response code should be 403
-        And I should receive an element with the following attributes
+
+
+    Scenario: Create an article as admin
+        Given I have a payload
             | title  | "Scissor" |
             | content | "je suis un ciseau" |
             | author | "1" |
-
         And I am authenticated as "admin"
         When I request "POST" "/articles" with payload
         And the response code should be 201
@@ -35,13 +37,6 @@ Feature: Article API
             | content | "je suis un ciseau" |
             | author | "1" |
 
-        And I am anonymous
-        When I request "POST" "/articles" with payload
-        And the response code should be 401
-        And I should receive an element with the following attributes
-            | title  | "Scissor" |
-            | content | "je suis un ciseau" |
-            | author | "1" |
 
     Scenario: Get an article
         Given I load fixtures "article.json"
