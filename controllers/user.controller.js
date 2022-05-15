@@ -53,9 +53,7 @@ const createUser = async (req, res) => {
         expiresIn: "3h",
       }
     );
-    console.log(user);
     user.token = token;
-    console.log(user.token);
 
     res.status(201).json(user);
   } catch (error) {
@@ -128,7 +126,6 @@ const login = async (req, res) => {
     const user = await models.User.findOne({
       where: { email},
     });
-
     if (user && (await bcrypt.compare(password, user.password))) {
       // Create token
       const token = jwt.sign(
@@ -139,9 +136,8 @@ const login = async (req, res) => {
         }
       );
 
-      // save user token
-      user.token = token;
-      return res.status(200).json({token});
+      // user
+      return res.status(200).json({ token });
     }
     res.status(400).send("Invalid Credentials");
   } catch (err) {
