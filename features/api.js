@@ -30,31 +30,19 @@ Given("I have a payload", function (dataTable) {
   this.payload = interpolate(dataTable.rowsHash());
 });
 
-// Given("I am authenticated as {string}", async function (string) {
-//   const user = ReferenceManager.getReference(string);
-//   const login = await client
-//     .post('/users/login')
-//     .set('Content-Type', 'application/json')
-//     .send({
-//       email: 'jane5@test.com',
-//       password: 'password',
-//     });
-//   // user => token
-//   this.token = login.body.token;
-// });
+Given("I am authenticated as {string}", async function (string) {
+  const user = ReferenceManager.getReference(string);
+  const login = await client
+    .post('/users/login')
+    .set('Content-Type', 'application/json')
+    .send({
+      email: 'jane5@test.com',
+      password: 'password',
+    });
+  // user => token
+  this.token = login.body.token;
+});
 
-// Given("There is a user {string} and {string}", async function (string ) {
-// Write code here that turns the phrase above into concrete actions
-//   const user = ReferenceManager.getReference(string);
-//   const login = await client
-//   .post('/users/login')
-//   .set('Content-Type', 'application/json')
-//   .send({
-//     email: {email},
-//     password: {password},
-//   }); 
-//   return login.response.status;
-// });
 
 Given('There is a user {string} and {string}', function (string, string2) {
   // Write code here that turns the phrase above into concrete actions 

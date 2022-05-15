@@ -24,3 +24,4 @@ Feature: User API
     And Send a POST HTTP request
       | email    | jandoe@gmail.com |
       | password | password         |
+      And the response code should be 200
