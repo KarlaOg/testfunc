@@ -90,6 +90,7 @@ When("I request {string} {string} with payload", async function (method, path) {
 
 Then("the response code should be {int}", function (int) {
   // Write code here that turns the phrase above into concrete actions
+  console.log(this.response.status);
   expect(this.response.status).toBe(int);
 });
 
