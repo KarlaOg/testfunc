@@ -7,7 +7,7 @@ module.exports = {
      *
      * Example:
      * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
-     */
+     
     await queryInterface.addColumn('Users', 'createdAt', {
       allowNull: false,
       type: Sequelize.DATE,
@@ -16,6 +16,7 @@ module.exports = {
       allowNull: false,
       type: Sequelize.DATE,
     });
+    */
   },
 
   async down(queryInterface, Sequelize) {

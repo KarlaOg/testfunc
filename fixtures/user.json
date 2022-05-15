@@ -2,7 +2,6 @@
   "model": "User",
   "data": {
     "admin": {
-      "name": "user admin",
       "firstname": "Martin",
       "lastname": "Jean",
       "email": "admin@gmail.com",
