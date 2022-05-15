@@ -2,18 +2,18 @@
   "model": "Article",
   "data": {
     "article1": {
-      "title": "Scissor",
-      "content": "dsokdqsok",
+      "title": "Titre 1",
+      "content": "je suis le contenu de l'article 1",
       "author": 1
     },
     "article2": {
-      "title": "Scissor2",
-      "content": "dsokdqsok",
+      "title": "Titre 2",
+      "content": "je suis le contenu de l'article 2",
       "author": 2
     },
     "article3": {
-      "title": "Scissor",
-      "content": "dsokdqsok",
+      "title": "Titre 3",
+      "content": "Je suis le contenu de l'article 3",
       "author": 1
     }
   },
